@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 autoscraper = "^1.1.14"
+cloudscraper = "^1.2.71"
 
 
 [tool.poetry.group.dev.dependencies]
