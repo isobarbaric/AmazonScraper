@@ -2,6 +2,15 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 
 AMAZON_SEARCH_URL = 'https://www.amazon.ca/s?k='
+AMAZON_REVIEW_URL = 'https://www.amazon.ca/product-reviews/
+
+star_page_suffix = {
+    5: '/ref=cm_cr_unknown?filterByStar=five_star&pageNumber=1',
+    4: '/ref=cm_cr_unknown?filterByStar=four_star&pageNumber=1',
+    3: '/ref=cm_cr_unknown?filterByStar=three_star&pageNumber=1',
+    2: '/ref=cm_cr_unknown?filterByStar=two_star&pageNumber=1',
+    1: '/ref=cm_cr_unknown?filterByStar=one_star&pageNumber=1',
+}
 
 def get_amazon_search_page(search_query: str):
     url = AMAZON_SEARCH_URL + '+'.join(search_query.split())
@@ -24,6 +33,28 @@ def get_closest_product_asin(html_page: str):
     asin_values = [single_listing['data-asin'] for single_listing in listings if len(single_listing['data-asin']) != 0]
 
     return asin_values[0]
+
+def __get_rated_reviews(url: str, num_reviews: int):
+    driver = webdriver.Chrome()
+    driver.get(url)
+    driver.implicitly_wait(3)
+
+    html_page = driver.page_source
+    driver.quit()
+
+    soup = BeautifulSoup(html_page, 'lxml')
+    reviews = soup.findAll('span', attrs={'data-hook': True})
+
+    reviews = [review for review in reviews if review['data-hook'] == 'review-body']
+
+    # extract text from span tag and clean up newlines in string
+    reviews = [review.text.strip() for review in reviews]    
+
+    return reviews
+
+def get_reviews(asin: str, num_stars: int, num_reviews: int):
+    base_url = AMAZON_REVIEW_URL + asin
+
 
 if __name__ == "__main__":
     search_query = 'iphone 15'
