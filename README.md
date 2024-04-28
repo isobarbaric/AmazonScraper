@@ -28,9 +28,6 @@ scraper = AmazonScraper()
 
 reviews = scraper.get_closest_product_reviews(search_query, num_reviews = 5, debug=True)
 # 13.47 seconds taken
-
-print(reviews)
-# [{'customer_name': 'Kenova Pelletier', 'rating': 1, 'review': 'This looked amazing out of the box...
 ```
 
 ## Disclaimer
