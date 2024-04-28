@@ -1,6 +1,6 @@
 # AmazonScraper
 
-Obtains information about the closest item available on Amazon relative to a provided 
+Retrieve data on the closest item on Amazon corresponding to a given search term
 
 ## Installation
 
@@ -13,7 +13,21 @@ Obtains information about the closest item available on Amazon relative to a pro
 search_query = 'ipad air'
 scraper = AmazonScraper()
 
+reviews = scraper.get_closest_product_reviews(search_query, num_reviews = 5)
+
+print(reviews)
+# [{'customer_name': 'Kenova Pelletier', 'rating': 1, 'review': 'This looked amazing out of the box...
+```
+
+### Debug Flag
+The `get_closest_product_reviews` method also has a `debug` flag available that outputs the total time taken for execution.
+
+```python
+search_query = 'ipad air'
+scraper = AmazonScraper()
+
 reviews = scraper.get_closest_product_reviews(search_query, num_reviews = 5, debug=True)
+# 13.47 seconds taken
 
 print(reviews)
 # [{'customer_name': 'Kenova Pelletier', 'rating': 1, 'review': 'This looked amazing out of the box...

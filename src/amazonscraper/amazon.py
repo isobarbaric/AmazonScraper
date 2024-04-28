@@ -117,7 +117,7 @@ class AmazonScraper:
 
         if debug:
             end = time.time()
-            print(f"{end - start} seconds taken")
+            print(f"{round(end - start, 2)} seconds taken")
 
         return reviews
 
