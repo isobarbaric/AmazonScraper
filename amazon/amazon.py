@@ -53,19 +53,74 @@ def __get_rated_reviews(url: str, num_reviews: int):
 
     return reviews
 
+def __get_rated_reviews(url: str):
+    driver = webdriver.Chrome()
+
+    # make browser headless so it works in the background
+    options = webdriver.ChromeOptions()
+    options.add_argument("headless")
+
+    driver.get(url)
+    driver.implicitly_wait(3)
+
+    html_page = driver.page_source
+    driver.quit()
+
+    soup = BeautifulSoup(html_page, 'lxml')
+    html_reviews = soup.findAll('div', attrs={"data-hook": "review"})
+
+    reviews = []
+    for html_review in html_reviews:
+        # extract text from various span tags and clean up newlines in their strings
+        name = html_review.find('span', class_='a-profile-name').text.strip()    
+
+        # Amazon's format is "x.0 stars out of 5" where x = # of stars
+        rating = html_review.find('span', class_='a-icon-alt').text.strip()[0]
+
+        review_body = html_review.find('span', attrs={'data-hook': 'review-body'}).text.strip()
+
+        reviews.append({'customer_name': name, 'rating': int(rating),'review': review_body})
+
+    return reviews
+
 def get_reviews(asin: str, num_reviews: int):
+    assert num_reviews % 5 == 0
+
     base_url = AMAZON_REVIEW_URL + asin
+    overall_reviews = []
 
-    for star_num in [1, 5]:
+    for star_num in range(1, 6):
         url = base_url + star_page_suffix[star_num]
-        print(url)
 
+        page_number = 1
+        reviews = []
+        reviews_per_star = int(num_reviews / 5)
+
+        while len(reviews) <= reviews_per_star:
+            page_url = url + str(page_number)
+            print(page_url)
+
+            # no reviews means we've exhausted all reviews
+            page_reviews = __get_rated_reviews(page_url)
+
+            if len(page_reviews) == 0:
+                break
+
+            reviews += page_reviews
+            page_number += 1
+
+        # shave off extra reviews coming from the last page
+        reviews = reviews[:reviews_per_star]
+        overall_reviews += reviews
+
+    return overall_reviews
 
 if __name__ == "__main__":
     search_query = 'iphone 15'
     
     html_page = get_amazon_search_page(search_query)
     product_asin = get_closest_product_asin(html_page)
-    print(product_asin)
+    # print(product_asin)
 
-    get_reviews(asin)
+    reviews = get_reviews(asin = product_asin, num_reviews = 10)
+    print(reviews)
