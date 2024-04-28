@@ -120,12 +120,3 @@ class AmazonScraper:
             print(f"{round(end - start, 2)} seconds taken")
 
         return reviews
-
-if __name__ == "__main__":
-    # example use case
-    search_query = 'ipad air'
-    scraper = AmazonScraper()
-    reviews = scraper.get_closest_product_reviews(search_query, num_reviews = 5, debug=True)
-
-    for review in reviews:
-        print(review)
