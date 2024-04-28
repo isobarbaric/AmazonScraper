@@ -2,15 +2,15 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 
 AMAZON_SEARCH_URL = 'https://www.amazon.ca/s?k='
-AMAZON_REVIEW_URL = 'https://www.amazon.ca/product-reviews/
+AMAZON_REVIEW_URL = 'https://www.amazon.ca/product-reviews/'
 
 # all start at page 1
 star_page_suffix = {
-    5: '/ref=cm_cr_unknown?filterByStar=five_star&pageNumber=1',
-    4: '/ref=cm_cr_unknown?filterByStar=four_star&pageNumber=1',
-    3: '/ref=cm_cr_unknown?filterByStar=three_star&pageNumber=1',
-    2: '/ref=cm_cr_unknown?filterByStar=two_star&pageNumber=1',
-    1: '/ref=cm_cr_unknown?filterByStar=one_star&pageNumber=1',
+    5: '/ref=cm_cr_unknown?filterByStar=five_star&pageNumber=',
+    4: '/ref=cm_cr_unknown?filterByStar=four_star&pageNumber=',
+    3: '/ref=cm_cr_unknown?filterByStar=three_star&pageNumber=',
+    2: '/ref=cm_cr_unknown?filterByStar=two_star&pageNumber=',
+    1: '/ref=cm_cr_unknown?filterByStar=one_star&pageNumber=',
 }
 
 def get_amazon_search_page(search_query: str):
@@ -53,8 +53,12 @@ def __get_rated_reviews(url: str, num_reviews: int):
 
     return reviews
 
-def get_reviews(asin: str, num_stars: int, num_reviews: int):
+def get_reviews(asin: str, num_reviews: int):
     base_url = AMAZON_REVIEW_URL + asin
+
+    for star_num in [1, 5]:
+        url = base_url + star_page_suffix[star_num]
+        print(url)
 
 
 if __name__ == "__main__":
@@ -62,5 +66,6 @@ if __name__ == "__main__":
     
     html_page = get_amazon_search_page(search_query)
     product_asin = get_closest_product_asin(html_page)
-
     print(product_asin)
+
+    get_reviews(asin)
