@@ -76,7 +76,8 @@ class AmazonScraper:
         return reviews
 
     def __get_reviews(self, asin: str, num_reviews: int):
-        assert num_reviews % 5 == 0
+        if num_reviews % 5 != 0:
+            raise ValueError(f"num_reviews parameter provided, {num_reviews}, is not divisible by 5")
 
         base_url = AmazonScraper.__amazon_review_url + asin
         overall_reviews = []
@@ -106,22 +107,25 @@ class AmazonScraper:
 
         return overall_reviews
 
-    def get_closest_product_reviews(self, search_query):
+    def get_closest_product_reviews(self, search_query, num_reviews, debug=False):
+        if debug:
+            start = time.time()
+
         html_page = self.__get_amazon_search_page(search_query)
         product_asin = self.__get_closest_product_asin(html_page)
-        reviews = self.__get_reviews(asin = product_asin, num_reviews = 10)
+        reviews = self.__get_reviews(asin = product_asin, num_reviews = num_reviews)
+
+        if debug:
+            end = time.time()
+            print(f"{end - start} seconds taken")
 
         return reviews
 
 if __name__ == "__main__":
     # example use case
-    start = time.time()
-
-    search_query = 'iphone 15'
+    search_query = 'ipad air'
     scraper = AmazonScraper()
-    reviews = scraper.get_closest_product_reviews(search_query)
+    reviews = scraper.get_closest_product_reviews(search_query, num_reviews = 5, debug=True)
 
-    end = time.time()
-
-    print(reviews)
-    print(f"{end - start} seconds taken")
+    for review in reviews:
+        print(review)
