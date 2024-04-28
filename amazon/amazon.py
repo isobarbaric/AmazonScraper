@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 AMAZON_SEARCH_URL = 'https://www.amazon.ca/s?k='
 AMAZON_REVIEW_URL = 'https://www.amazon.ca/product-reviews/
 
+# all start at page 1
 star_page_suffix = {
     5: '/ref=cm_cr_unknown?filterByStar=five_star&pageNumber=1',
     4: '/ref=cm_cr_unknown?filterByStar=four_star&pageNumber=1',
