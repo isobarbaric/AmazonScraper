@@ -19,10 +19,11 @@ class AmazonScraper:
     def __init__(self):
         pass
 
-    def __get_amazon_search_page(self, search_query: str):
+    def __get_amazon_search_page(self, search_query: str, headless: bool = True):
         # setting up a headless web driver to get search query
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless=new")
+        if headless:
+            options.add_argument("--headless=new")
         driver = webdriver.Chrome(options=options)
 
         url = AmazonScraper.__amazon_search_url + '+'.join(search_query.split())
@@ -46,10 +47,11 @@ class AmazonScraper:
 
         return asin_values[0]
 
-    def __get_rated_reviews(self, url: str):
+    def __get_rated_reviews(self, url: str, headless: bool = True):
         # setting up a headless web driver to get search query
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless=new")
+        if headless:
+            options.add_argument("--headless=new")
         driver = webdriver.Chrome(options=options)
 
         driver.get(url)
@@ -75,7 +77,7 @@ class AmazonScraper:
 
         return reviews
 
-    def __get_reviews(self, asin: str, num_reviews: int):
+    def __get_reviews(self, asin: str, num_reviews: int, headless: bool = True):
         if num_reviews % 5 != 0:
             raise ValueError(f"num_reviews parameter provided, {num_reviews}, is not divisible by 5")
 
@@ -93,7 +95,7 @@ class AmazonScraper:
                 page_url = url + str(page_number)
 
                 # no reviews means we've exhausted all reviews
-                page_reviews = self.__get_rated_reviews(page_url)
+                page_reviews = self.__get_rated_reviews(page_url, headless)
 
                 if len(page_reviews) == 0:
                     break
@@ -107,13 +109,13 @@ class AmazonScraper:
 
         return overall_reviews
 
-    def get_closest_product_reviews(self, search_query, num_reviews, debug=False):
+    def get_closest_product_reviews(self, search_query: str, num_reviews: int, headless: bool = True, debug: bool = False):
         if debug:
             start = time.time()
 
-        html_page = self.__get_amazon_search_page(search_query)
+        html_page = self.__get_amazon_search_page(search_query, headless)
         product_asin = self.__get_closest_product_asin(html_page)
-        reviews = self.__get_reviews(asin = product_asin, num_reviews = num_reviews)
+        reviews = self.__get_reviews(asin = product_asin, num_reviews = num_reviews, headless = headless)
 
         if debug:
             end = time.time()
