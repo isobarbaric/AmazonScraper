@@ -1,3 +1,4 @@
+import argparse
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
@@ -5,8 +6,8 @@ import time
 class AmazonScraper:
     __wait_time = 0.5
 
-    __amazon_search_url = 'https://www.amazon.ca/s?k='
-    __amazon_review_url = 'https://www.amazon.ca/product-reviews/'
+    __amazon_search_url = 'https://www.amazon.com/s?k='
+    __amazon_review_url = 'https://www.amazon.com/product-reviews/'
 
     __star_page_suffix = {
         5: '/ref=cm_cr_unknown?filterByStar=five_star&pageNumber=',
@@ -110,6 +111,9 @@ class AmazonScraper:
         return overall_reviews
 
     def get_closest_product_reviews(self, search_query: str, num_reviews: int, headless: bool = True, debug: bool = False):
+        if len(search_query) == 0:
+            raise ValueError(f'Search query provided is an empty string')
+
         if debug:
             start = time.time()
 
@@ -122,3 +126,24 @@ class AmazonScraper:
             print(f"{round(end - start, 2)} seconds taken")
 
         return reviews
+    
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(prog='AmazonScraper', description='Fetch Amazon product reviews based on a search query.')
+    parser.add_argument('query', type=str, help='Product search query to fetch reviews for')
+    parser.add_argument('num_reviews', type=int, help='Number of reviews to fetch')
+
+    # optional flags
+    parser.add_argument('--headless', action='store_true', help='Run browser in headless mode', default=True)
+    parser.add_argument('--debug', action='store_true', help='Enable debug output', default=False)
+
+    args = parser.parse_args()
+    # print(args)
+
+    scraper = AmazonScraper()
+    reviews = scraper.get_closest_product_reviews(
+        search_query=args.query, 
+        num_reviews=10, 
+        headless=args.headless, 
+        debug=args.debug
+    )
+    print(reviews)
