@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Krish Shah <shahkrish2016@gmail.com>"]
 readme = "README.md"
-packages = [{include = "amazonscraper", from="src"}]
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
