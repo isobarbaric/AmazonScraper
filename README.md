@@ -2,6 +2,16 @@
 
 Retrieve data on the closest item on Amazon corresponding to a given search term or directly using an ASIN.
 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Fetch Reviews by Search Query](#fetch-reviews-by-search-query)
+  - [Fetch Reviews by ASIN](#fetch-reviews-by-asin)
+  - [Debug Flag](#debug-flag)
+- [Command Line Usage](#command-line-usage)
+  - [Fetch Reviews by Search Query (CLI)](#fetch-reviews-by-search-query-cli)
+  - [Fetch Reviews by ASIN (CLI)](#fetch-reviews-by-asin-cli)
+- [Disclaimer](#disclaimer)
+
 ## Installation
 
 1. Get [Python Poetry](https://python-poetry.org/)
@@ -56,12 +66,12 @@ reviews = scraper.get_product_reviews_by_asin(product_asin, num_reviews=5, debug
 ## Command Line Usage
 You can also use this tool from the command line to fetch reviews by either search query or ASIN.
 
-#### Fetch Reviews by Search Query
+#### Fetch Reviews by Search Query (CLI)
 ```sh
 python amazon_scraper.py --query "ipad air" 5 --headless --debug
 ```
 
-#### Fetch Reviews by ASIN
+#### Fetch Reviews by ASIN (CLI)
 ```sh
 python amazon_scraper.py --asin "B08J65DST5" 5 --headless --debug
 ```
