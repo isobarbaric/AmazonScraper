@@ -8,7 +8,6 @@ class AmazonScraper:
 
     __amazon_search_url = 'https://www.amazon.com/s?k='
     __amazon_review_url = 'https://www.amazon.com/product-reviews/'
-    __amazon_asin_review_url = 'https://www.amazon.com/product-reviews/'
 
     __star_page_suffix = {
         5: '/ref=cm_cr_unknown?filterByStar=five_star&pageNumber=',
@@ -135,7 +134,6 @@ class AmazonScraper:
         if debug:
             start = time.time()
 
-        # reviews_url = AmazonScraper.__amazon_asin_review_url + asin
         reviews = self.__get_reviews(asin = product_asin, num_reviews = num_reviews, headless = headless)
 
         if debug:
