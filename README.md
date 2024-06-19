@@ -72,12 +72,12 @@ You can also use this tool from the command line to fetch reviews by either sear
 
 #### Fetch Reviews by Search Query (CLI)
 ```sh
-python amazon_scraper.py --query "ipad air" 5 --headless --debug
+python src/amazon.py --query "ipad air" 5 --headless --debug
 ```
 
 #### Fetch Reviews by ASIN (CLI)
 ```sh
-python amazon_scraper.py --asin "B08J65DST5" 5 --headless --debug
+python src/amazon.py --asin "B08J65DST5" 5 --headless --debug
 ```
 
 Note that the `--headless` and the `--debug` flags are optional.
