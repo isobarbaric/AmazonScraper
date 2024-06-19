@@ -23,6 +23,8 @@ Retrieve data on the closest item on Amazon corresponding to a given search term
 ### Fetch Reviews by Search Query
 Retrieve reviews for the closest product on Amazon based on a search query.
 ```python
+from src.amazon import AmazonScraper
+
 search_query = 'ipad air'
 scraper = AmazonScraper()
 
@@ -35,6 +37,8 @@ print(reviews)
 ### Fetch Reviews by ASIN
 Retrieve reviews for a specific product on Amazon using its ASIN.
 ```python
+from src.amazon import AmazonScraper
+
 product_asin = 'B08J65DST5'
 scraper = AmazonScraper()
 
